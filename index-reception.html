@@ -1,1 +1,329 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Shakar & Jasmin - Wedding Invitation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #b45309;
+        }
+        body {
+            font-family: 'Playfair Display', serif;
+            overflow-x: hidden;
+            background-color: #FCFBF7;
+            width: 100%;
+        }
+        .font-devanagari { font-family: 'Noto Sans Devanagari', sans-serif; }
+        .font-cinzel { font-family: 'Cinzel', serif; }
+
+        /* Full Width Parallax */
+        .parallax-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .parallax-bg {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
+            background-image: linear-gradient(rgba(252, 251, 247, 0.88), rgba(252, 251, 247, 0.88)), 
+                              url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover;
+            background-position: center;
+            will-change: transform;
+        }
+
+        .entrance-screen {
+            transition: all 1s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+        .entrance-hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Responsive Glass Cards - Full width on Mobile */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(180, 83, 9, 0.1);
+            width: 100%;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes subtle-float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.01); }
+        }
+        .hero-image-animate { animation: subtle-float 5s ease-in-out infinite; }
+    </style>
+</head>
+<body class="text-stone-800 antialiased w-full">
+
+    <div class="parallax-wrapper">
+        <div class="parallax-bg" id="parallax"></div>
+    </div>
+
+    <!-- Entrance Screen -->
+    <div id="entrance" class="fixed inset-0 z-[100] bg-[#FDFCF8] flex items-center justify-center entrance-screen">
+        <div class="text-center px-6">
+            <div class="mb-8 relative flex justify-center">
+                <div class="absolute inset-0 animate-ping rounded-full border border-amber-200 opacity-30"></div>
+                <div class="relative w-24 h-24 border border-amber-600 rounded-full flex items-center justify-center bg-white shadow-xl">
+                    <svg class="text-amber-600 fill-amber-600 w-10 h-10" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                </div>
+            </div>
+            <p class="text-amber-700 tracking-[0.4em] uppercase text-[9px] mb-4 font-bold lang-en">॥ Shree Ganeshaya Namah ॥</p>
+            <p class="text-amber-700 tracking-[0.4em] uppercase text-[9px] mb-4 font-bold lang-np font-devanagari">॥ श्री गणेशाय नम: ॥</p>
+            <h1 class="text-5xl md:text-8xl font-cinzel mb-12 text-stone-900">Shakar <span class="text-amber-600 italic">&</span> Jasmin</h1>
+            <button onclick="openInvitation()" class="bg-amber-700 text-white px-12 py-5 rounded-full text-[10px] tracking-[0.3em] uppercase font-black shadow-lg">Open Invitation</button>
+        </div>
+    </div>
+
+    <!-- Language Controls -->
+    <div class="fixed top-4 right-4 z-[90] flex bg-white/90 backdrop-blur rounded-full p-1 border border-amber-100 shadow-lg opacity-0 transition-opacity" id="controls">
+        <button onclick="setLanguage('en')" id="btn-en" class="px-4 py-2 rounded-full text-[9px] font-black tracking-widest transition-all bg-amber-700 text-white">EN</button>
+        <button onclick="setLanguage('np')" id="btn-np" class="px-4 py-2 rounded-full text-[9px] font-black tracking-widest transition-all text-amber-800">नेपाली</button>
+    </div>
+
+    <!-- Content -->
+    <main class="relative z-10 opacity-0 transition-opacity duration-1000 w-full" id="main-content">
+        
+        <!-- Hero - Full Width on Mobile -->
+        <section class="min-h-screen flex flex-col items-center justify-center w-full overflow-hidden">
+            <div class="text-center w-full px-4">
+                <p class="text-amber-700 text-[10px] tracking-[0.8em] uppercase font-black mb-10 lang-en">॥ Shree Ganeshaya Namah ॥</p>
+                <p class="text-amber-700 text-[10px] tracking-[0.8em] uppercase font-black mb-10 lang-np font-devanagari">॥ श्री गणेशाय नम: ॥</p>
+                
+                <div class="relative mx-auto mb-10 w-[90vw] h-[90vw] max-w-[500px] max-h-[500px]">
+                    <div class="absolute -inset-4 border border-amber-200/40 rounded-full"></div>
+                    <div class="relative w-full h-full overflow-hidden rounded-full border-[10px] border-white shadow-2xl hero-image-animate">
+                        <img src="https://i.ibb.co/wFwFWvFV/IMG-20260118-131434-208.webp" alt="Couple" class="w-full h-full object-cover">
+                    </div>
+                </div>
+
+                <h1 class="text-6xl md:text-[10rem] font-cinzel text-stone-900 mb-6 tracking-tighter leading-none">Shakar & Jasmin</h1>
+                
+                <div class="flex items-center justify-center gap-6 text-stone-500 tracking-[0.4em] uppercase text-[10px] font-black border-y border-amber-100 py-6 max-w-lg mx-auto">
+                    <span>FEB 2026</span>
+                    <div class="h-1.5 w-1.5 bg-amber-600 rounded-full"></div>
+                    <span>KATHMANDU</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Invite Card - Full Width on Mobile -->
+        <section class="py-20 w-full">
+            <div class="w-full md:max-w-5xl md:mx-auto glass-card p-8 md:p-24 md:rounded-[4rem] text-center">
+                <svg class="w-12 h-12 mx-auto text-amber-500/30 mb-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" stroke-width="1"/></svg>
+                
+                <p class="text-2xl md:text-4xl leading-relaxed text-stone-800 italic mb-16 lang-en px-2">
+                    With the divine blessings of our ancestors and the grace of God, we cordially invite you to celebrate the wedding ceremony of our beloved grandson Shakar with Jasmin.
+                </p>
+                <p class="text-2xl md:text-4xl leading-relaxed text-stone-800 font-devanagari mb-16 lang-np px-2">
+                    कुलदेवताको असीम कृपा र पितृहरूको आशिर्वाद स्वरूप मेरो साशव नाति ई. साकार र ई. जस्मिनको यो मांगलिक विवाह उत्सवमा यहाँको गरिमामय उपस्थितिको लागि हार्दिक निमन्त्रणा गर्दछु।
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="p-8 bg-white/40 border border-amber-50 rounded-3xl">
+                        <p class="text-amber-800 text-[9px] font-black mb-4 uppercase tracking-widest lang-en">The Groom</p>
+                        <p class="text-amber-800 text-[9px] font-black mb-4 uppercase tracking-widest lang-np font-devanagari">वर</p>
+                        <h3 class="text-3xl text-stone-900 font-cinzel mb-2">Shakar Bhattarai</h3>
+                        <p class="text-stone-500 text-sm italic lang-en">Son of Sr. Adv. Tikaram Bhattarai & Indira Dahal Bhattarai</p>
+                        <p class="text-stone-500 text-base font-devanagari lang-np">वरिष्ठ अधिवक्ता टीकाराम भट्टराई र इन्दिरा दाहाल भट्टराईका सुपुत्र</p>
+                    </div>
+                    <div class="p-8 bg-white/40 border border-amber-50 rounded-3xl">
+                        <p class="text-amber-800 text-[9px] font-black mb-4 uppercase tracking-widest lang-en">The Bride</p>
+                        <p class="text-amber-800 text-[9px] font-black mb-4 uppercase tracking-widest lang-np font-devanagari">वधु</p>
+                        <h3 class="text-3xl text-stone-900 font-cinzel mb-2">Jasmin Tiwari</h3>
+                        <p class="text-stone-500 text-sm italic lang-en">Daughter of Jyoti Tiwari & Sita Tiwari</p>
+                        <p class="text-stone-500 text-base font-devanagari lang-np">ज्योति तिवारी र सीता तिवारीकी सुपुत्री</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Events - Stacked on Mobile, Full Width -->
+        <section class="py-10 w-full space-y-6 px-0 md:px-6">
+            <div class="w-full md:max-w-6xl md:mx-auto grid lg:grid-cols-2 gap-6">
+                
+                
+
+                <!-- Reception -->
+                <div class="glass-card p-10 md:rounded-[3rem] shadow-lg reveal">
+                    <div class="w-16 h-16 bg-rose-50 text-rose-700 rounded-2xl flex items-center justify-center mb-8">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z" stroke-width="1.2"/></svg>
+                    </div>
+                    <h3 class="text-4xl font-cinzel mb-8 lang-en">Reception Party</h3>
+                    <h3 class="text-4xl font-devanagari mb-8 lang-np">प्रीतिभोज समारोह</h3>
+                    <div class="space-y-6 text-stone-600 mb-10 text-lg">
+                        <div class="flex items-start gap-4">
+                            <svg class="w-5 h-5 text-rose-700 mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2"/></svg>
+                            <span class="lang-en font-bold">Friday, Feb 27, 2026 (Falgun 15)</span>
+                            <span class="lang-np font-devanagari">२०८२ फागुन १५ गते, शुक्रबार (२७ फेब्रुअरी)</span>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <svg class="w-5 h-5 text-rose-700 mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2"/></svg>
+                            <span class="lang-en">03:30 PM to 07:30 PM</span>
+                            <span class="lang-np font-devanagari">दिउँसो ३:३० देखि बेलुका ७:३० सम्म</span>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <svg class="w-5 h-5 text-rose-700 mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-width="2"/></svg>
+                            <span class="lang-en">Karki Banquet, Babarmahal, Kathmandu</span>
+                            <span class="lang-np font-devanagari">कार्की ब्याङ्क्वेट, बबरमहल, काठमाडौँ</span>
+                        </div>
+                    </div>
+                    <a href="https://www.google.com/maps/search/?api=1&query=Karki+Banquet+Maitighat+Kathmandu" target="_blank" class="block text-center py-5 bg-rose-700 text-white rounded-full text-[10px] font-black tracking-widest uppercase shadow-md">Get Directions</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Photo Album - Full Width -->
+        <section class="py-20 w-full overflow-hidden">
+            <div class="w-full md:max-w-6xl md:mx-auto glass-card md:rounded-[4rem] overflow-hidden flex flex-col lg:flex-row shadow-xl">
+                <div class="p-10 md:p-20 lg:flex-1 text-center lg:text-left">
+                    <h2 class="text-4xl font-cinzel text-stone-900 mb-6 lang-en">Live Photo Album</h2>
+                    <h2 class="text-4xl font-devanagari text-stone-900 mb-6 lang-np">लाइभ फोटो एल्बम</h2>
+                    <p class="text-stone-500 text-lg mb-10 lang-en">Scan the QR code to upload and share your special moments from the ceremony directly to our digital album.</p>
+                    <p class="text-stone-500 text-lg mb-10 lang-np font-devanagari">समारोहका सुन्दर पलहरूलाई यस QR कोड मार्फत सिधै हाम्रो डिजिटल एल्बममा राख्न र साझा गर्न सक्नुहुन्छ।</p>
+                    <a href="https://photos.app.goo.gl/XYoM8Jv3u6oixU5ZA" target="_blank" class="inline-flex items-center gap-4 bg-stone-900 text-white px-10 py-5 rounded-full text-[10px] tracking-widest font-black uppercase shadow-lg">Open Album 
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8.684 13.342C8.886 12.938 9 12.482 9 12" stroke-width="2"/></svg>
+                    </a>
+                </div>
+                <div class="bg-amber-50/30 p-10 md:p-20 flex items-center justify-center border-t lg:border-t-0 lg:border-l border-amber-100">
+                    <div class="bg-white p-6 rounded-[2rem] shadow-lg border-4 border-white">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=350x350&data=https://photos.app.goo.gl/XYoM8Jv3u6oixU5ZA&color=b45309" alt="Album QR" class="w-56 h-56 md:w-72 md:h-72">
+                        <p class="mt-4 text-center text-stone-400 text-[8px] font-black uppercase tracking-[0.4em]">Scan to Share</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Section -->
+        <section class="py-20 w-full overflow-hidden">
+            <div class="w-full md:max-w-4xl md:mx-auto glass-card py-20 px-6 md:rounded-[4rem] text-center">
+                <h2 class="text-3xl italic text-amber-800 mb-12 lang-en">With Best Compliments</h2>
+                <h2 class="text-3xl font-devanagari text-amber-800 mb-12 lang-np">दर्शनाभिलाषी</h2>
+                
+                <div class="grid md:grid-cols-2 gap-10 text-stone-600 mb-20 text-base">
+                    <div>
+                        <p class="font-black text-stone-900 uppercase text-[10px] tracking-widest mb-4">Our Family</p>
+                        <div class="lang-en space-y-2">
+                            <p>Thulobuwa : Om Prakash Bhattarai</p>
+                            <p>Thulobuwa/Thuliama : Dr. Tilchandra & Dr. Sharda Bhattarai</p>
+                            <p>Mama : Ganesh Dahal, Mahesh Dahal</p>
+                        </div>
+                        <div class="lang-np space-y-2 font-devanagari">
+                            <p>ठुलोबुवा: ओम प्रकाश भट्टराई</p>
+                            <p>ठुलोबुवा/ठुलोमामु : </p>डा. तिलचन्द्र र डा. शारदा भट्टराई</p>
+                            <p>मामा : गणेश दाहाल, महेश दाहाल</p>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="font-black text-stone-900 uppercase text-[10px] tracking-widest mb-4"></p>
+                        <div class="lang-en space-y-2">
+                            <p>Phupu: Hem Kumari, Meena, Durga, Kavita</p>
+                            <p>Thuli ama: Uma, Bimala, Kamala</p>
+                            <p>Bhai: Pukar Bhattarai & Family</p>
+                        </div>
+                        <div class="lang-np space-y-2 font-devanagari">
+                            <p>फुपु: हेम कुमारी, मीना, दुर्गा, कविता</p>
+                            <p>ठुलिआमा: उमा, विमला, कमला</p>
+                            <p>भाई: पुकार भट्टराई तथा परिवार</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-16 border-t border-stone-100">
+                    <p class="text-amber-800 text-[10px] font-black mb-6 uppercase tracking-[0.5em] lang-en">Prarthi</p>
+                    <p class="text-amber-800 text-[10px] font-black mb-6 uppercase tracking-[0.5em] lang-np font-devanagari">प्रार्थी</p>
+                    
+                    <h4 class="text-5xl font-cinzel text-stone-900 mb-12 lang-en">Grandmother: Indira  Bhattarai</h4>
+                    <h4 class="text-5xl font-cinzel text-stone-900 mb-12 lang-np">हजुरआमा: इन्दिरा भट्टराई</h4>
+                    
+                    <div class="bg-white p-10 rounded-[3rem] shadow-lg border border-amber-50 inline-block w-full max-w-sm">
+                        <p class="text-stone-400 text-[9px] uppercase tracking-widest mb-4 lang-en">Assistance:</p>
+                        <p class="text-stone-800 font-cinzel text-2xl mb-2">Tikaram Bhattarai</p>
+                        <a href="tel:9851067239" class="text-amber-700 font-mono text-3xl font-bold">9851067239</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="py-16 bg-stone-900 text-stone-600 text-center text-[9px] tracking-[1em] uppercase">
+            Shakar & Jasmin • 2026
+        </footer>
+    </main>
+
+    <script>
+        function openInvitation() {
+            document.getElementById('entrance').classList.add('entrance-hidden');
+            document.getElementById('main-content').classList.remove('opacity-0');
+            document.getElementById('controls').classList.remove('opacity-0');
+            window.scrollTo(0, 0);
+            handleScrollReveal();
+        }
+
+        function setLanguage(lang) {
+            const enNodes = document.querySelectorAll('.lang-en');
+            const npNodes = document.querySelectorAll('.lang-np');
+            const btnEn = document.getElementById('btn-en');
+            const btnNp = document.getElementById('btn-np');
+
+            if (lang === 'en') {
+                enNodes.forEach(node => node.style.display = 'block');
+                npNodes.forEach(node => node.style.display = 'none');
+                btnEn.classList.add('bg-amber-700', 'text-white');
+                btnNp.classList.remove('bg-amber-700', 'text-white');
+            } else {
+                enNodes.forEach(node => node.style.display = 'none');
+                npNodes.forEach(node => node.style.display = 'block');
+                btnNp.classList.add('bg-amber-700', 'text-white');
+                btnEn.classList.remove('bg-amber-700', 'text-white');
+            }
+        }
+
+        window.addEventListener('scroll', () => {
+            const parallax = document.getElementById('parallax');
+            const controls = document.getElementById('controls');
+            let offset = window.pageYOffset;
+            parallax.style.transform = `translateY(${offset * 0.3}px)`;
+            if (offset > 50) controls.style.opacity = '1';
+            handleScrollReveal();
+        });
+
+        function handleScrollReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(reveal => {
+                const windowHeight = window.innerHeight;
+                const revealTop = reveal.getBoundingClientRect().top;
+                if (revealTop < windowHeight - 50) {
+                    reveal.classList.add('active');
+                }
+            });
+        }
+
+        setLanguage('en');
+    </script>
+</body>
+</html>
